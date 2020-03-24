@@ -19,7 +19,7 @@ router.get('/', function (req, res, next) {
       }
     });
 
-    const fields = ['country','total', 'new','newDeaths','totalRecovered','active','serious','totCasesPer1m',,,,,,];
+    const fields = ['country','total', 'new', 'totalDeaths', 'newDeaths','totalRecovered','active','serious','totCasesPer1m',,,,,,];
 
     const data = $('#main_table_countries_today > tbody > tr');
     
