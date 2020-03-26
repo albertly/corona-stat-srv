@@ -1,19 +1,36 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cors = require('cors');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cors = require('cors');
+const cron = require('node-cron');
 
-var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
+const { closeDb, openDb } = require('./utils/common');
+const {addProb} = require('./services/dailyProb.service');
+const { getStat } = require('./services/stat.service');
+const app = express();
 
-
-var app = express();
+openDb(process.env.MONGO);
 
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+ 
+cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
+  getStat().then(r =>{
+    const val = r[r.length-1].new;
+    console.log(r);
+    console.log('val', val);
+    addProb(val);
+    console.log( `running a task every minute ${process.env.PROBE}`);  
+  });
+
+});
 
 app.use('/', indexRouter);
 
@@ -31,7 +48,9 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  console.log('err', err);
+
+  res.send(err);
 });
 
 module.exports = app;
