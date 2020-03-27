@@ -6,9 +6,8 @@ const router = express.Router();
 const { getProbByDate } = require('../services/dailyProb.service');
 const { getStat } = require('../services/stat.service');
 
-router.get('/prob', async function (req, res, next) {
-  const result = await getProbByDate('2020-03-26');
-
+router.get('/prob/:probDate', async function (req, res, next) {
+  const result = await getProbByDate(req.params['probDate']);
   res.json(result);
 });
 
@@ -17,9 +16,9 @@ router.get('/', function (req, res, next) {
   getStat().then(r => {
     res.json(r);
   })
-  .catch(e => {
+    .catch(e => {
       console.log('e', e);
-  });
+    });
 
 });
 

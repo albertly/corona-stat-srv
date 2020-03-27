@@ -36,7 +36,7 @@ exports.getProbByDate = async function (d) {
     try {    
         console.log('fromD', fromD);
         console.log('tillD', tillD);
-        return await DailyProb.find({"date": {"$gte": fromS, "$lt": tillS}});
+        return await DailyProb.find({"date": {"$gte": fromD.toUTCString(), "$lt": tillD.toUTCString()}});
   
     }
     catch(err) {
