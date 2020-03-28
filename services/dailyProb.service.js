@@ -25,19 +25,15 @@ exports.addProb = async function (value) {
 };
 
 exports.getProbByDate = async function (d) {
-
     const fromD = new Date(d);
     let tillD = new Date(d);
     tillD.setDate(tillD.getDate() + 1);
-    
-    const fromS = fromD.getFullYear()+'-'+(fromD.getMonth()+1)+'-'+fromD.getDate();
-    const tillS = tillD.getFullYear()+'-'+(tillD.getMonth()+1)+'-'+tillD.getDate();
 
     try {    
-        console.log('fromD', fromD);
-        console.log('tillD', tillD);
-        return await DailyProb.find({"date": {"$gte": fromD.toUTCString(), "$lt": tillD.toUTCString()}});
-  
+        return await DailyProb.find(
+            {"date": 
+                {"$gte": fromD.toGMTString(), "$lt": tillD.toGMTString()}
+            });
     }
     catch(err) {
         throw err;
