@@ -7,7 +7,7 @@ const cron = require('node-cron');
 const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
-const { closeDb, openDb } = require('./utils/common');
+const { closeDb, openDb, WSStart } = require('./utils/common');
 const {addProb} = require('./services/dailyProb.service');
 const { getStat } = require('./services/stat.service');
 const app = express();
@@ -33,6 +33,29 @@ cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
   });
 
 });
+
+
+WSStart();
+/////////////////////
+// const WebSocket = require('ws');
+
+// const wss = new WebSocket.Server({ port: 8080 });
+
+// wss.on('connection', function connection(ws) {
+//   console.log('connection data');
+//   wss.clients.add(ws);
+//   ws.on('message', function incoming(data) {
+//     console.log('data', data);
+//     console.log('wss.clients', wss.clients.size);
+//     wss.clients.forEach(function each(client) {
+//       if (client.readyState === WebSocket.OPEN) {
+//         console.log('send data');
+//         client.send(data);
+//       }
+//     });
+//   });
+// });
+///////////////////////////////////
 
 app.use('/', indexRouter);
 

@@ -1,14 +1,14 @@
 
-const moment = require('moment');
+const { broadcast } = require('../utils/common');
 
 const DailyProb = require('../models/dailyProb');
 
 exports.addProb = async function (value) {
 
     const today = new Date();
-    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const date = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
     console.log('date', date);
-    const probeTime = today.getHours() + ":" + today.getMinutes();
+    const probeTime = today.getHours() + ":" + today.getMinutes();    
 
     try {    
         const dailyProb = new DailyProb({
@@ -17,7 +17,9 @@ exports.addProb = async function (value) {
             newCases: value,
         });
 
-        await dailyProb.save();   
+        await dailyProb.save();  
+        
+        broadcast('PROB_READY');
     }
     catch(err) {
         throw err;
