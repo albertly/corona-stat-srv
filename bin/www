@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('corona-stat-srv:server');
 var http = require('http');
-
+const { WSStart } = require('../utils/common');
 /**
  * Get port from environment and store in Express.
  */
@@ -29,6 +29,7 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+WSStart(server);
 /**
  * Normalize a port into a number, string, or false.
  */

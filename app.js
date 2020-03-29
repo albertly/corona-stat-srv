@@ -35,7 +35,7 @@ cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
 });
 
 
-WSStart();
+
 /////////////////////
 // const WebSocket = require('ws');
 

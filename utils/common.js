@@ -25,9 +25,10 @@ exports.openDb = async function openDb(db) {
 
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+let wss;
 
-exports.WSStart = function WSStart() {
+exports.WSStart = function WSStart(server) {
+    wss = new WebSocket.Server({server});
     wss.on('connection', function connection(ws) {
         console.log('connection data');
         wss.clients.add(ws);
