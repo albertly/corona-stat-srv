@@ -31,11 +31,13 @@ exports.WSStart = function WSStart(server) {
     wss = new WebSocket.Server({server});    
     wss.on('connection', function connection(ws) {
         console.log('connection data');
-        ws01 = ws;
-        wss.clients.add(ws);
+
 
         ws.on('message', function incoming(data) {
             console.log('data', data);
+            ws01 = ws;
+            wss.clients.add(ws);
+            console.log('socket added');
         });
     });
 }
