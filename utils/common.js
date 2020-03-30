@@ -25,6 +25,12 @@ exports.openDb = async function openDb(db) {
 
 const WebSocket = require('ws');
 
+function heartbeat() {
+    this.isAlive = true;
+}
+
+
+
 let wss;
 let ws01;
 exports.WSStart = function WSStart(server) {
@@ -32,6 +38,8 @@ exports.WSStart = function WSStart(server) {
     wss.on('connection', function connection(ws) {
         console.log('connection data');
 
+        ws.isAlive = true;
+        ws.on('pong', heartbeat);
 
         ws.on('message', function incoming(data) {
             console.log('data', data);
@@ -40,12 +48,28 @@ exports.WSStart = function WSStart(server) {
             console.log('socket added');
         });
     });
+
+    wss.on('close', function close() {
+        clearInterval(interval);
+    });
 }
+function noop() {}
+const interval = setInterval(function ping() {
+    wss.clients.forEach(function each(ws) {
+      if (ws.isAlive === false) return ws.terminate();
+   
+      ws.isAlive = false;
+      ws.ping(noop);
+    });
+}, 30000);
 
 exports.broadcast = function broadcast(msg) {
     console.log('in broadcast');
     if (ws01) {
         ws01.send('ws01 send');
+    }
+    else {
+        console.log("Not connected");
     }
     
     wss.clients.forEach(function each(client) {
