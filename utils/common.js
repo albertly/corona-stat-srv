@@ -26,11 +26,12 @@ exports.openDb = async function openDb(db) {
 const WebSocket = require('ws');
 
 let wss;
-
+let ws01;
 exports.WSStart = function WSStart(server) {
-    wss = new WebSocket.Server({server});
+    wss = new WebSocket.Server({server});    
     wss.on('connection', function connection(ws) {
         console.log('connection data');
+        ws01 = ws;
         wss.clients.add(ws);
 
         ws.on('message', function incoming(data) {
@@ -41,6 +42,7 @@ exports.WSStart = function WSStart(server) {
 
 exports.broadcast = function broadcast(msg) {
     console.log('in broadcast');
+    ws01.send('ws01 send');
     wss.clients.forEach(function each(client) {
         console.log('client');
       //  if (client.readyState === WebSocket.OPEN) {
