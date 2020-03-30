@@ -26,8 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
   getStat().then(r =>{
     const val = r[r.length-1].new;
-    console.log(r);
-    console.log('val', val);
     addProb(val);
     console.log( `running a task every minute ${process.env.PROBE}`);  
   });

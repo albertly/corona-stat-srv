@@ -32,7 +32,6 @@ exports.getStat = function () {
   
       });
 
-      console.log('axios reply 1');
       return reply;
     });
 }
