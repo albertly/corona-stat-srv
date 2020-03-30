@@ -42,7 +42,10 @@ exports.WSStart = function WSStart(server) {
 
 exports.broadcast = function broadcast(msg) {
     console.log('in broadcast');
-    ws01.send('ws01 send');
+    if (ws01) {
+        ws01.send('ws01 send');
+    }
+    
     wss.clients.forEach(function each(client) {
         console.log('client');
       //  if (client.readyState === WebSocket.OPEN) {
