@@ -27,32 +27,38 @@ const WebSocket = require('ws');
 
 function heartbeat() {
     this.isAlive = true;
+    console.log('heartbeat');
 }
 
 let wss;
 
 exports.WSStart = function WSStart(server) {
-    wss = new WebSocket.Server({server});    
+    wss = new WebSocket.Server({server, clientTracking:true});    
     wss.on('connection', function connection(ws) {
-        console.log('connection data');
+        console.log('wss on connection');
 
         ws.isAlive = true;
         ws.on('pong', heartbeat);
 
         ws.on('message', function incoming(data) {
-            console.log('data', data);
-
-            wss.clients.add(ws);
-            console.log('socket added');
+            console.log('ws on message', data);
+           // wss.clients.add(ws);
+           // console.log('socket added');
         });
     });
 
     wss.on('close', function close() {
+        console.log('wss on close');
         clearInterval(interval);
     });
 }
-function noop() {}
+
+function noop() {
+    console.log('noop');
+}
+
 const interval = setInterval(function ping() {
+    console.log('setInterval wss.size', wss.size);
     wss.clients.forEach(function each(ws) {
       if (ws.isAlive === false) return ws.terminate();
    
@@ -62,11 +68,10 @@ const interval = setInterval(function ping() {
 }, 30000);
 
 exports.broadcast = function broadcast(msg) {
-    console.log('in broadcast');
-
+    console.log('in broadcast wss.size', wss.size);
     wss.clients.forEach(function each(client) {
        if (client.readyState === WebSocket.OPEN) {
-           console.log('sending msg');
+            console.log('sending msg', msg);
             client.send(msg);
         }
     });
