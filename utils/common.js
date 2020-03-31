@@ -58,7 +58,7 @@ function noop() {
 }
 
 const interval = setInterval(function ping() {
-    console.log('setInterval wss.size', wss.size);
+    console.log('setInterval wss.clients.size', wss.clients.size);
     wss.clients.forEach(function each(ws) {
       if (ws.isAlive === false) return ws.terminate();
    
@@ -68,7 +68,7 @@ const interval = setInterval(function ping() {
 }, 30000);
 
 exports.broadcast = function broadcast(msg) {
-    console.log('in broadcast wss.size', wss.size);
+    console.log('in broadcast wss.clients.size', wss.clients.size);
     wss.clients.forEach(function each(client) {
        if (client.readyState === WebSocket.OPEN) {
             console.log('sending msg', msg);
