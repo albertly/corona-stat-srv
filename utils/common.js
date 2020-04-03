@@ -27,7 +27,6 @@ const WebSocket = require('ws');
 
 function heartbeat() {
     this.isAlive = true;
-    console.log('heartbeat');
 }
 
 let wss;
@@ -42,8 +41,6 @@ exports.WSStart = function WSStart(server) {
 
         ws.on('message', function incoming(data) {
             console.log('ws on message', data);
-           // wss.clients.add(ws);
-           // console.log('socket added');
         });
     });
 
@@ -53,9 +50,7 @@ exports.WSStart = function WSStart(server) {
     });
 }
 
-function noop() {
-    console.log('noop');
-}
+function noop() {}
 
 const interval = setInterval(function ping() {
     console.log('setInterval wss.clients.size', wss.clients.size);
@@ -75,4 +70,5 @@ exports.broadcast = function broadcast(msg) {
             client.send(msg);
         }
     });
+
 }

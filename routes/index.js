@@ -11,9 +11,9 @@ router.get('/prob/:probDate', async function (req, res, next) {
   res.json(result);
 });
 
-router.get('/', function (req, res, next) {
+router.get('/:day?', function (req, res, next) {
 
-  getStat().then(r => {
+  getStat(!req.params.day ? true : false).then(r => {
     res.json(r);
   })
     .catch(e => {
