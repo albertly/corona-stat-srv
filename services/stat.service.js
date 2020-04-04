@@ -31,8 +31,10 @@ exports.getStat = function (today = true) {
             obj[fields[j]] =  $(this).text();
           }
         })
-  
-      reply.push(obj);
+      if (obj.county !== 'World') {
+        reply.push(obj);
+      }
+      
   
       });
 
