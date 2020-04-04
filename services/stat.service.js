@@ -23,8 +23,11 @@ exports.getStat = function (today = true) {
         tableName = '#main_table_countries_yesterday'
       }
       const data = $(`${tableName} > tbody > tr`);
-      
+
       data.each(function (i) {
+        if (i === 0) {
+          continue;
+        }
         let obj = {};
         $(this).find('td').each(function (j) {
           if (fields[j]) {
@@ -34,7 +37,6 @@ exports.getStat = function (today = true) {
       if (obj.county !== 'World') {
         reply.push(obj);
       }
-      
   
       });
 
