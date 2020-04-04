@@ -54,6 +54,9 @@ exports.getStat = function (today = true) {
   }
 
   console.log('cache hitted');
-  return cacheValue;
+  return new Promise( (resolutionFunc,rejectionFunc) => {
+    resolutionFunc(cacheValue);
+  });
+
 
 }
