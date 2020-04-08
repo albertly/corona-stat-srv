@@ -1,10 +1,15 @@
 const express = require('express');
-const axios = require('axios');
-const cheerio = require('cheerio');
 
 const router = express.Router();
 const { getProbByDate } = require('../services/dailyProb.service');
 const { getStat } = require('../services/stat.service');
+const { getDailyCasesWorldwide } = require('../services/cases.service');
+
+router.get('/graph', async function (req, res, next) {
+  const result = await getDailyCasesWorldwide();
+  console.log('result', result);
+  res.json(result);
+});
 
 router.get('/prob/:probDate', async function (req, res, next) {
   const result = await getProbByDate(req.params['probDate']);
