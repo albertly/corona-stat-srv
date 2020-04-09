@@ -26,6 +26,7 @@ exports.getStat = function (today = true) {
         }
       });
 
+      const skipCountries = ['Europe', 'World', 'Asia', 'South America', 'Africa', 'Oceania', 'North America', ''];
       const fields = ['country', 'total', 'new', 'totalDeaths', 'newDeaths', 'totalRecovered', 'active', 'serious', 'totCasesPer1m', , , , , ,];
 
       let tableName = '#main_table_countries_today';
@@ -42,7 +43,8 @@ exports.getStat = function (today = true) {
               obj[fields[j]] = $(this).text();
             }
           })
-          if (obj.county !== 'World') {
+          console.log(obj.country);
+          if (skipCountries.indexOf(obj.country.trim()) == -1) {
             reply.push(obj);
           }
         }
