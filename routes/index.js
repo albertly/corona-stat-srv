@@ -5,10 +5,12 @@ const { getProbByDate } = require('../services/dailyProb.service');
 const { getStat } = require('../services/stat.service');
 const { getDailyCasesWorldwide } = require('../services/cases.service');
 
-router.get('/graph', async function (req, res, next) {
-  const result = await getDailyCasesWorldwide();
+router.get('/graph/:country?', async function (req, res, next) {
+
+  const result = await getDailyCasesWorldwide(req.params.country);
   console.log('result', result);
   res.json(result);
+
 });
 
 router.get('/prob/:probDate', async function (req, res, next) {

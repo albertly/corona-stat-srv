@@ -15,9 +15,9 @@ exports.getStat = function (today = true) {
   const cacheValue = myCache.get(key);
 
   if (cacheValue == undefined) {
-    console.log('axios start 1');
+  
     return axios.get(url).then(r => {
-      console.log('axios end 1');
+  
       const reply = [];
 
       const $ = cheerio.load(r.data, {
@@ -43,7 +43,7 @@ exports.getStat = function (today = true) {
               obj[fields[j]] = $(this).text();
             }
           })
-          console.log(obj.country);
+
           if (skipCountries.indexOf(obj.country.trim()) == -1) {
             reply.push(obj);
           }

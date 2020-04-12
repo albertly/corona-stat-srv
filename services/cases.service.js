@@ -5,36 +5,48 @@ const NodeCache = require("node-cache");
 const key = 'main_table_countries_today11';
 
 
-exports.getDailyCasesWorldwide = function () {
-
-    const url = 'https://www.worldometers.info/coronavirus/coronavirus-cases/';
-
+exports.getDailyCasesWorldwide = function (country) {
+    //https://www.worldometers.info/coronavirus/coronavirus-death-toll/
+    let url = 'https://www.worldometers.info/coronavirus/coronavirus-cases/';
+    let startStr = "Highcharts.chart('coronavirus',"
+    if (country) {
+        //https://www.worldometers.info/coronavirus/country/israel/
+        url = `https://www.worldometers.info/coronavirus/country/${country}/`;
+        startStr = "Highcharts.chart('graph-cases-daily',";
+    }
+    //
+    // Highcharts.chart('graph-deaths-daily',
     const cacheValue = undefined; // myCache.get(key);
 
     if (cacheValue == undefined) {
-        console.log('axios start 1');
-        return axios.get(url).then(r => {
-            console.log('axios end 1');
-
-            const startStr = "Highcharts.chart('coronavirus',"
-            const start = r.data.indexOf(startStr) + startStr.length;
-            const end = r.data.indexOf(");", start);
-            const res = r.data.substring(start, end);
-            //console.log(res);
-            eval('var obj=' + res + '');
-            //console.log(obj.xAxis);
-            console.log(obj.series[0].data);
-            return obj;
-
-            myCache.set(key, reply);
-            return reply;
-        });
+        console.log('before Scrape', url)
+        return Scrape(url, startStr);
     }
 
-    console.log('cache hitted');
+    
     return new Promise((resolutionFunc, rejectionFunc) => {
         resolutionFunc(cacheValue);
     });
 
+
+}
+
+function Scrape(url, startStr) {
+
+    return axios.get(url).then(r => {
+  
+
+        const start = r.data.indexOf(startStr) + startStr.length;
+        const end = r.data.indexOf(");", start);
+        const res = r.data.substring(start, end);
+
+        eval('var obj=' + res + '');
+
+        return obj;
+
+       // myCache.set(key, reply);
+       // return reply;
+    })
+    .catch(e => console.log(e));
 
 }
