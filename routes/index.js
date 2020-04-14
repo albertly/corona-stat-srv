@@ -8,7 +8,6 @@ const { getDailyCasesWorldwide } = require('../services/cases.service');
 router.get('/graph/:country?', async function (req, res, next) {
 
   const result = await getDailyCasesWorldwide(req.params.country);
-  console.log('result', result);
   res.json(result);
 
 });

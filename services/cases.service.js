@@ -1,29 +1,36 @@
 const axios = require('axios');
 const NodeCache = require("node-cache");
 
-//const myCache = new NodeCache({ stdTTL: 30, checkperiod: 120 });
-const key = 'main_table_countries_today11';
+const myCache = new NodeCache({ stdTTL: 600, checkperiod: 1200 });
+const KEY = 'table_countries_';
+let key = '';
 
 
 exports.getDailyCasesWorldwide = function (country) {
-    //https://www.worldometers.info/coronavirus/coronavirus-death-toll/
-    let url = 'https://www.worldometers.info/coronavirus/coronavirus-cases/';
+
+    let url = 'https://www.worldometers.info/coronavirus/worldwide-graphs/';
     let startStr = "Highcharts.chart('coronavirus',"
+    let startStrDeath = "Highcharts.chart('coronavirus-deaths-daily',";
     if (country) {
-        //https://www.worldometers.info/coronavirus/country/israel/
         url = `https://www.worldometers.info/coronavirus/country/${country}/`;
         startStr = "Highcharts.chart('graph-cases-daily',";
+        startStrDeath = "Highcharts.chart('graph-deaths-daily',";
     }
-    //
-    // Highcharts.chart('graph-deaths-daily',
-    const cacheValue = undefined; // myCache.get(key);
+
+    key = `${KEY}${country}`
+    const cacheValue = myCache.get(key);
 
     if (cacheValue == undefined) {
-        console.log('before Scrape', url)
-        return Scrape(url, startStr);
+
+        const promise1 = Scrape(url, startStr);
+        const promise2 = Scrape(url, startStrDeath);
+        return Promise.all([promise1, promise2]).then(r => {
+            myCache.set(key, r);
+            return r;
+        });
     }
 
-    
+    console.log('cache hitted ' + key);
     return new Promise((resolutionFunc, rejectionFunc) => {
         resolutionFunc(cacheValue);
     });

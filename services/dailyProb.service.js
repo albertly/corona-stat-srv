@@ -7,7 +7,6 @@ exports.addProb = async function (value) {
 
     const today = new Date();
     const date = today.getFullYear()+'-0'+(today.getMonth()+1)+'-'+today.getDate();
-    console.log('date', date);
     const probeTime = today.getHours() + ":" + today.getMinutes();    
 
     try {    
