@@ -27,7 +27,7 @@ exports.getStat = function (today = true) {
       });
 
       const skipCountries = ['Europe', 'World', 'Asia', 'South America', 'Africa', 'Oceania', 'North America', ''];
-      const fields = ['country', 'total', 'new', 'totalDeaths', 'newDeaths', 'totalRecovered', 'active', 'serious', 'totCasesPer1m', , , , , ,];
+      const fields = ['country', 'total', 'new', 'totalDeaths', 'newDeaths', 'totalRecovered', 'active', 'serious', 'totCasesPer1m','dPer1m' , ,'tPer1m' , , ,];
 
       let tableName = '#main_table_countries_today';
       if (!today) {
