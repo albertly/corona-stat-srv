@@ -9,7 +9,7 @@ let key = '';
 exports.getDailyCasesWorldwide = function (country) {
 
     let url = 'https://www.worldometers.info/coronavirus/worldwide-graphs/';
-    let startStr = "Highcharts.chart('coronavirus',"
+    let startStr = "Highcharts.chart('coronavirus_cases_daily',"
     let startStrDeath = "Highcharts.chart('coronavirus-deaths-daily',";
     let startStrActive = "Highcharts.chart('graph-active-cases-total',";
     if (country) {
@@ -55,7 +55,8 @@ function Scrape(r, startStr) {
         const start = r.data.indexOf(startStr) + startStr.length;
         const end = r.data.indexOf(");", start);
         const res = r.data.substring(start, end);
-
+        
+        console.log('res', res)
         eval('var obj=' + res + '');
 
         return obj;
