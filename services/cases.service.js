@@ -53,7 +53,8 @@ exports.getDailyCasesWorldwide = function (country) {
 
 function Scrape(r, startStr) {
         const start = r.data.indexOf(startStr) + startStr.length;
-        const end = r.data.indexOf(");", start);
+        const end = r.data.indexOf(`);
+        </script>`, start);
         const res = r.data.substring(start, end);
         
         console.log('res', res)
