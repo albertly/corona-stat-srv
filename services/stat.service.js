@@ -28,7 +28,7 @@ exports.getStat = function (today = true) {
 
       const skipCountries = ['Europe', 'World', 'Asia', 'South America', 'Africa', 'Oceania', 'North America', ''];
       const fields = [, 'country', 'total', 'new', 'totalDeaths',  'newDeaths', 'totalRecovered', 'newRecovered',
-                        'active', 'serious', 'totCasesPer1m','dPer1m' ,'tTests' ,'tPer1m' , 'Po', 'Cont', '1CperXppl', '1TperXppl' ];
+                        'active', 'serious', 'totCasesPer1m','dPer1m' ,'tTests' ,'tPer1m' , 'Po', 'Cont', '1CperXppl', '1DperXppl', '1TperXppl' ];
 
       let tableName = '#main_table_countries_today';
       if (!today) {
