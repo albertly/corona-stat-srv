@@ -14,11 +14,14 @@ const app = express();
 
 openDb(process.env.MONGO);
 
+
+
+
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(bodyParser.json({ type: '*/*' }));
+app.use(bodyParser.json({ type: '*/*' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
