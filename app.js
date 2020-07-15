@@ -14,10 +14,11 @@ const app = express();
 
 openDb(process.env.MONGO);
 
+const corsOptions = {
+  exposedHeaders: ['date', 'etag'],
+};
 
-
-
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
