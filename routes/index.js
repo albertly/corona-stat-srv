@@ -4,41 +4,45 @@ const router = express.Router();
 const { getProbByDate } = require('../services/dailyProb.service');
 const { getStat } = require('../services/stat.service');
 const { getDailyCasesWorldwide } = require('../services/cases.service');
-const { addSubscriber, broadcastNotification } = require('../services/notification.service');
+const {
+  addSubscriber,
+  broadcastNotification,
+} = require('../services/notification.service');
 const { broadcast } = require('../utils/common');
 const { restart } = require('nodemon');
 
-
-router.post('/subscribe', async function(req, res, next){
+router.post('/subscribe', async function (req, res, next) {
   const notification = req.body;
 
   try {
     await addSubscriber(notification);
     res.status(201);
     return res.json('Ok');
-  }
-  catch(e) {
+  } catch (e) {
     res.send(500);
     return res.send('Error adding subscription: ' + e);
   }
-
 });
 
-router.get('/broadcast', async function(req, res, next){
+router.get('/broadcast', async function (req, res, next) {
   try {
     await broadcastNotification('');
     return res.status(200).json('Ok');
-  }
-  catch(e) {
-    return res.status(500).send('Error broadcasting notification: ' + e);
+  } catch (e) {
+    return res
+      .status(500)
+      .send(
+        'Error broadcasting notification: GCMAPI_KEY: ' +
+          process.env.GCMAPI_KEY +
+          ' Error ' +
+          e
+      );
   }
 });
 
 router.get('/graph/:country?', async function (req, res, next) {
-
   const result = await getDailyCasesWorldwide(req.params.country);
   res.json(result);
-
 });
 
 router.get('/prob/:probDate', async function (req, res, next) {
@@ -47,14 +51,13 @@ router.get('/prob/:probDate', async function (req, res, next) {
 });
 
 router.get('/:day?', function (req, res, next) {
-
-  getStat(!req.params.day ? true : false).then(r => {
-    res.json(r);
-  })
-    .catch(e => {
+  getStat(!req.params.day ? true : false)
+    .then((r) => {
+      res.json(r);
+    })
+    .catch((e) => {
       console.log('e', e);
     });
-
 });
 
 module.exports = router;
