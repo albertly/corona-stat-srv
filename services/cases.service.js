@@ -52,7 +52,12 @@ exports.getDailyCasesWorldwide = function (country) {
 }
 
 function Scrape(r, startStr) {
-        const start = r.data.indexOf(startStr) + startStr.length;
+        const startPos = r.data.indexOf(startStr);
+        if (startPos === -1) {
+            return {};
+        }
+
+        const start = startPos + startStr.length;
         const end = r.data.indexOf(`responsive: {`, start);
         const res = r.data.substring(start, end);
         
