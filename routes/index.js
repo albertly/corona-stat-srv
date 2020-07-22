@@ -1,6 +1,6 @@
 const express = require('express');
-
 const router = express.Router();
+
 const { getProbByDate } = require('../services/dailyProb.service');
 const { getStat } = require('../services/stat.service');
 const { getDailyCasesWorldwide } = require('../services/cases.service');
@@ -10,6 +10,15 @@ const {
 } = require('../services/notification.service');
 const { broadcast } = require('../utils/common');
 const { restart } = require('nodemon');
+const authMiddleware = require('../utils/auth');
+
+router.get('/testAuth', authMiddleware, function (req, res, next) {
+  res.json('Ok. Auth');
+});
+
+router.get('/test', function (req, res, next) {
+  res.json('Ok. test');
+});
 
 router.post('/subscribe', async function (req, res, next) {
   const notification = req.body;
