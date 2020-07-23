@@ -13,17 +13,15 @@ const { restart } = require('nodemon');
 const authMiddleware = require('../utils/auth');
 
 router.get('/testAuth', authMiddleware, function (req, res, next) {
+  console.log('/testAuth');
   res.json('Ok. Auth');
 });
 
-router.get('/test', function (req, res, next) {
-  res.json('Ok. test');
-});
-
-router.post('/subscribe', async function (req, res, next) {
-  const notification = req.body;
+router.post('/subscribe', authMiddleware, async function (req, res, next) {
+  const notification = { ...req.body, uid: req.userClaims.uid };
 
   try {
+    console.log('notification', notification);
     await addSubscriber(notification);
     res.status(201);
     return res.json('Ok');

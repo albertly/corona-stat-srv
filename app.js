@@ -12,7 +12,7 @@ const {addProb} = require('./services/dailyProb.service');
 const { getStat } = require('./services/stat.service');
 const app = express();
 
-//openDb(process.env.MONGO);
+openDb(process.env.MONGO);
 
 const corsOptions = {
   exposedHeaders: ['date', 'etag'],
@@ -27,14 +27,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
  
-// cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
-//   getStat().then(r =>{
-//     const val = r[r.length-1].new;
-//     addProb(val);
-//     console.log( `running a task every minute ${process.env.PROBE}`);  
-//   });
+cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
+  getStat().then(r =>{
+    const val = r[r.length-1].new;
+    addProb(val);
+    console.log( `running a task every minute ${process.env.PROBE}`);  
+  });
 
-// });
+});
 
 
 
