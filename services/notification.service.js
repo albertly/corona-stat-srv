@@ -54,7 +54,7 @@ exports.broadcastNotification = function (delta) {
   try {
     delta.forEach(async (d) => {
       const country = d.country;
-      const msg = `Country: ${country} - ${d.new} {$d.newOld}`;
+      const msg = `Country: ${country} - ${d.new} ${d.newOld}`;
       const subscribers = await Notification.find(
         { countries: { $elemMatch: { $in: [country] } } },
         { endpoint: 1, keys: 1, _id: 0 }
