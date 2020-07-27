@@ -1,12 +1,15 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const NodeCache = require('node-cache');
-const { previousData } = require('../utils/common');
+//const { previousData } = require('../utils/common');
+
+const { broadcastNotification }  = require('./notification.service');
 
 const myCache = new NodeCache({ stdTTL: 30, checkperiod: 120 });
 const keyToday = 'main_table_countries_today';
 const keyYesterday = 'main_table_countries_yesterday';
 
+global.previousData = [];
 function compareArr(new_, old_) {
   const res = [];
   let total = '';
@@ -28,7 +31,7 @@ function compareArr(new_, old_) {
     }
   });
 
-  return { res };
+  return  res ;
 }
 
 exports.getStat = function (today = true) {
@@ -108,6 +111,7 @@ exports.getStat = function (today = true) {
 
         if (delta.length) {
           console.log('delta found :', delta);
+          broadcastNotification(delta);
         }
       }
       previousData = reply;
