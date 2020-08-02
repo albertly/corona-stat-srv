@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+var compression = require('compression');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -8,7 +9,7 @@ const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
 const { closeDb, openDb, WSStart } = require('./utils/common');
-const {addProb} = require('./services/dailyProb.service');
+const { addProb } = require('./services/dailyProb.service');
 const { getStat } = require('./services/stat.service');
 const app = express();
 
@@ -18,6 +19,7 @@ const corsOptions = {
   exposedHeaders: ['date', 'etag'],
 };
 
+app.use(compression());
 app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,18 +27,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-
- 
 cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
-  getStat().then(r =>{
-    const val = r[r.length-1].new;
+  getStat().then((r) => {
+    const val = r[r.length - 1].new;
     addProb(val);
-    console.log( `running a task every minute ${process.env.PROBE}`);  
+    console.log(`running a task every minute ${process.env.PROBE}`);
   });
-
 });
-
-
 
 /////////////////////
 // const WebSocket = require('ws');
@@ -60,7 +57,6 @@ cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
 ///////////////////////////////////
 
 app.use('/', indexRouter);
-
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
