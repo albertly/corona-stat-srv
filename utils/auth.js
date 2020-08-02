@@ -23,6 +23,7 @@ module.exports = async (req, res, next) => {
     req.userClaims = claims;
     next();
   } catch (error) {
-    next(error.message);
+    res.status(401);
+    return res.json(error);
   }
 };

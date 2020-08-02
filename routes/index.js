@@ -26,7 +26,7 @@ router.post('/subscribe', authMiddleware, async function (req, res, next) {
     res.status(201);
     return res.json('Ok');
   } catch (e) {
-    res.send(500);
+    res.send(e);
     return res.send('Error adding subscription: ' + e);
   }
 });

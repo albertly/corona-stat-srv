@@ -5,7 +5,7 @@ const NodeCache = require('node-cache');
 
 const { broadcastNotification }  = require('./notification.service');
 
-const myCache = new NodeCache({ stdTTL: 30, checkperiod: 120 });
+const myCache = new NodeCache({ stdTTL: 150, checkperiod: 300 });
 const keyToday = 'main_table_countries_today';
 const keyYesterday = 'main_table_countries_yesterday';
 
@@ -118,6 +118,8 @@ exports.getStat = function (today = true) {
 
       myCache.set(key, reply);
       return reply;
+    }).catch(e => {
+      console.log( "Error getting data ", e );
     });
   }
 
