@@ -7,6 +7,7 @@ const { getDailyCasesWorldwide } = require('../services/cases.service');
 const {
   addSubscriber,
   broadcastNotification,
+  getSubscriber,
 } = require('../services/notification.service');
 const { broadcast } = require('../utils/common');
 const { restart } = require('nodemon');
@@ -17,17 +18,26 @@ router.get('/testAuth', authMiddleware, function (req, res, next) {
   res.json('Ok. Auth');
 });
 
+router.post('/subscriber', async function (req, res, next) {
+  const key = { ...req.body };
+  try {
+    const subscriber = await getSubscriber(key);
+    res.status(200);
+    return res.json(subscriber);
+  } catch (e) {
+    return res.status(500).send('Error getting subscriber: ' + e);
+  }
+});
+
 router.post('/subscribe', authMiddleware, async function (req, res, next) {
   const notification = { ...req.body, uid: req.userClaims.uid };
 
   try {
-    console.log('notification', notification);
     await addSubscriber(notification);
     res.status(201);
     return res.json('Ok');
   } catch (e) {
-    res.send(e);
-    return res.send('Error adding subscription: ' + e);
+    return res.status(500).send('Error adding subscription: ' + e);
   }
 });
 

@@ -1,6 +1,21 @@
 const webpush = require('web-push');
 const Notification = require('../models/notification');
 
+exports.getSubscriber = async function (value) {
+  try {
+    const doc = await Notification.findOne({
+      endpoint: value.endpoint,
+      uid: value.uid,
+      'keys.auth': value.keys.auth,
+      'keys.p256dh': value.keys.p256dh,
+    });
+
+    return doc;
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.addSubscriber = async function (value) {
   try {
     const update = {
