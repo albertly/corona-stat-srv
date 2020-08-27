@@ -2,7 +2,8 @@ const createError = require('http-errors');
 var compression = require('compression');
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
+const  logger  = require('./utils/logger');
+const loggerM = require('morgan');
 const cors = require('cors');
 const cron = require('node-cron');
 const bodyParser = require('body-parser');
@@ -11,6 +12,8 @@ const indexRouter = require('./routes/index');
 const { closeDb, openDb, WSStart } = require('./utils/common');
 const { addProb } = require('./services/dailyProb.service');
 const { getStat } = require('./services/stat.service');
+
+
 const app = express();
 
 openDb(process.env.MONGO);
@@ -21,17 +24,24 @@ const corsOptions = {
 
 app.use(compression());
 app.use(cors(corsOptions));
-app.use(logger('dev'));
+
+const options = {
+  stream: {
+      write: message => logger.info(message.trim()),
+  },
+};
+
+app.use(loggerM('dev', options));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+logger.info(`running a task every minute ${process.env.PROBE}`)
 cron.schedule(`*/${process.env.PROBE} * * * *`, () => {
   getStat().then((r) => {
     const val = r[r.length - 1].new;
-    addProb(val);
-    console.log(`running a task every minute ${process.env.PROBE}`);
+    addProb(val);        
   });
 });
 

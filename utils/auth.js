@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
       token,
       'api://default'
     );
-    console.log('Auth result', result);
+
     const { claims } = result;
     if (!claims.scp.includes(process.env.SCOPE)) {
       throw new Error('Could not verify the proper scope');

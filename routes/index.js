@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const logger = require('../utils/logger');
 
 const { getProbByDate } = require('../services/dailyProb.service');
 const { getStat } = require('../services/stat.service');
@@ -14,7 +15,7 @@ const { restart } = require('nodemon');
 const authMiddleware = require('../utils/auth');
 
 router.get('/testAuth', authMiddleware, function (req, res, next) {
-  console.log('/testAuth');
+  logger.log('/testAuth');
   res.json('Ok. Auth');
 });
 
@@ -37,6 +38,7 @@ router.post('/subscribe', authMiddleware, async function (req, res, next) {
     res.status(201);
     return res.json('Ok');
   } catch (e) {
+    logger.error('Error adding subscription: ' + e);
     return res.status(500).send('Error adding subscription: ' + e);
   }
 });
@@ -46,6 +48,7 @@ router.get('/broadcast', async function (req, res, next) {
     await broadcastNotification('');
     return res.status(200).json('Ok');
   } catch (e) {
+    logger.error('Error broadcasting ' + e);
     return res
       .status(500)
       .send(
@@ -72,8 +75,8 @@ router.get('/:day?', function (req, res, next) {
     .then((r) => {
       res.json(r);
     })
-    .catch((e) => {
-      console.log('e', e);
+    .catch((e) => {      
+      logger.error('Error get /:day ' + e);
     });
 });
 
