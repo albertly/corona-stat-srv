@@ -1,4 +1,5 @@
 const webpush = require('web-push');
+const logger = require('../utils/logger');
 const Notification = require('../models/notification');
 
 exports.getSubscriber = async function (value) {
@@ -36,6 +37,7 @@ exports.addSubscriber = async function (value) {
 
     await doc.save();
   } catch (err) {
+    logger.err('Error addSubscriber ' + e);
     throw err;
   }
 };
@@ -57,11 +59,10 @@ function sendNotification(subscription, msg) {
   webpush
     .sendNotification(pushSubscription, msg)
     .then((r) => {
-      var i = r;
-      console.log('Notification result: ', r);
+      logger.silly('Notification result: ' + r);
     })
     .catch((e) => {
-      console.log(e);
+      logger.err('Error sendNotification ' + e);
     });
 }
 
@@ -79,12 +80,8 @@ exports.broadcastNotification = function (delta) {
       });
     });
 
-    // const subscribers = await Notification.find({});
-    // subscribers.forEach(subscription => {
-    //     sendNotification(subscription);
-    // })
-    // console.log(subscribers);
   } catch (err) {
+    logger.error('Error broadcastNotification ' + err);
     throw err;
   }
 };

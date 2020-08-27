@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const NodeCache = require('node-cache');
-//const { previousData } = require('../utils/common');
+const logger = require('../utils/logger');
 
 const { broadcastNotification }  = require('./notification.service');
 
@@ -110,7 +110,7 @@ exports.getStat = function (today = true) {
         const delta = compareArr(reply, previousData);
 
         if (delta.length) {
-          console.log('delta found :', delta);
+          logger.silly(`Delta found : ${delta}`);
           broadcastNotification(delta);
         }
       }
@@ -118,12 +118,13 @@ exports.getStat = function (today = true) {
 
       myCache.set(key, reply);
       return reply;
-    }).catch(e => {
-      console.log( "Error getting data ", e );
+    }).catch(e => {      
+      logger.error(`Error getting data: ${e}`);
     });
   }
 
-  console.log('cache hitted ' + key);
+  logger.silly(`cache hitted ${key}`);
+
   return new Promise((resolutionFunc, rejectionFunc) => {
     resolutionFunc(cacheValue);
   });
